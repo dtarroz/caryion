@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#111827">
+  <title>Music Player – POC Streaming MP3</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="page">
+    <header class="header">
+      <h1>🎵 Music Player</h1>
+      <p class="subtitle">POC streaming MP3 – Safari iPhone</p>
+    </header>
+
+    <!-- Lecture en cours -->
+    <section class="card now-playing">
+      <div class="np-cover" id="npCover">♪</div>
+      <div class="np-info">
+        <div class="np-title" id="npTitle">Aucun morceau sélectionné</div>
+        <div class="np-artist" id="npArtist">—</div>
+        <div class="np-album" id="npAlbum">—</div>
+      </div>
+      <div class="np-actions">
+        <button id="btnPrev" class="btn-icon">|&lt;</button>
+        <button id="btnPlay" class="btn-play">▶ Lecture</button>
+        <button id="btnNext" class="btn-icon">&gt;|</button>
+      </div>
+    </section>
+
+    <!-- Progression -->
+    <section class="card progress">
+      <div class="progress-labels">
+        <span id="txtCurrent">0:00</span>
+        <span id="txtDuration">0:00</span>
+      </div>
+      <input type="range" id="sldProgress" min="0" max="100" value="0">
+    </section>
+
+    <!-- Playlist -->
+    <section class="card playlist">
+      <h2 id="playlistTitle">Morceaux disponibles (<span id="count">0</span>)</h2>
+      <ul id="trackList" role="list">
+        <!-- rempli par JavaScript -->
+      </ul>
+      <p class="empty" id="emptyMsg" hidden>Aucun fichier MP3 trouvé sur le serveur.</p>
+    </section>
+
+    <footer class="footer">
+      <p id="status">Prêt. Sélectionnez un morceau et appuyez sur Lecture.</p>
+      <p class="hint">Lecture en streaming direct depuis le serveur (aucun téléchargement préalable).</p>
+    </footer>
+  </div>
+
+  <!-- Élément audio unique, conservé pendant toute la session (pas de recréation entre les morceaux). -->
+  <audio id="audioPlayer" preload="metadata" src=""></audio>
+
+  <script src="js/player.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+# ASP.NET Core
+bin/
+obj/
+*.user
+*.suo
+launchSettings.json
+.vs/
+
+# Dépôt musical local (développement uniquement)
+MusicPlayer.Web/mp3/
+
+# IDE
+.idea/
+*.code-workspace
