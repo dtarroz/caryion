@@ -90,7 +90,7 @@
     // Mise à jour des métadonnées Media Session (verrouillage d'écran / centre de contrôle).
     updateMediaSessionMetadata(track);
 
-    setStatus(`Morceau sélectionné : ${track.Title}.`);
+    setStatus(`Morceau sélectionné : ${track.title}.`);
   }
 
   // --- Lecture / Pause ---
