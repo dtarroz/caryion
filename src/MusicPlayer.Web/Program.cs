@@ -1,6 +1,13 @@
 using MusicPlayer.Web.Services;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Journalisation : NLog remplace les providers par défaut de Microsoft.Extensions.Logging.
+// La configuration est lue depuis nlog.config (copié dans le répertoire de sortie).
+// Le code applicatif continue d'utiliser ILogger<T> via l'injection de dépendances.
+builder.Logging.ClearProviders();
+builder.Host.UseNLog();
 
 // Configuration du répertoire MP3 via appsettings (défaut : /var/lib/music-player/mp3/).
 // Surcharge possible par variable d'environnement, ex. MusicLibrary__RootPath.
