@@ -71,7 +71,7 @@
 
     // Mise à jour de l'URL de l'élément audio (streaming HTTP direct).
     // Un seul élément audio est conservé pour toute la session (pas de recréation).
-    audioPlayer.src = track.Url;
+    audioPlayer.src = track.url;
 
     // Mise à jour de l'interface "now playing".
     // Note : le JSON de l'API ASP.NET Core utilise la casse camelCase (title, url, size...).

@@ -1,5 +1,4 @@
 using MusicPlayer.Web.Models;
-using Microsoft.Extensions.Logging;
 namespace MusicPlayer.Web.Services;
 
 /// <summary>
@@ -9,11 +8,9 @@ namespace MusicPlayer.Web.Services;
 public class MusicLibraryService
 {
     private readonly string _rootPath;
-    private readonly ILogger<MusicLibraryService> _logger;
 
-    public MusicLibraryService(IConfiguration configuration, ILogger<MusicLibraryService> logger)
+    public MusicLibraryService(IConfiguration configuration)
     {
-        _logger = logger;
         // Chemin du répertoire MP3. Par défaut (production) : /var/lib/music-player/mp3/
         // En développement, ce chemin peut être surchargé via appsettings.Development.json.
         _rootPath = configuration["MusicLibrary:RootPath"] ?? "/var/lib/music-player/mp3";
@@ -24,11 +21,8 @@ public class MusicLibraryService
     /// </summary>
     public IEnumerable<Track> GetTracks()
     {
-        _logger.LogError("Lecture de la liste des fichiers MP3 dans le répertoire : {RootPath}", _rootPath);
-
         if (!Directory.Exists(_rootPath))
         {
-            _logger.LogError("Répertoire MP3 introuvable : {RootPath}", _rootPath);
             // Répertoire absent (cas courant en développement avant ajout de fichiers).
             return Enumerable.Empty<Track>();
         }
