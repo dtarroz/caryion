@@ -16,6 +16,8 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+app.UsePathBase(app.Configuration["path-base"]);
+
 // Fichiers statiques (index.html, CSS, JS) servis depuis wwwroot.
 app.UseStaticFiles();
 
