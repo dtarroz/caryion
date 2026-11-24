@@ -4,7 +4,7 @@
 (function () {
   'use strict';
 
-  const API_TRACKS = '/api/tracks';
+  const API_TRACKS = 'api/tracks';
 
   // --- Éléments DOM ---
   const audioPlayer = document.getElementById('audioPlayer');
@@ -23,7 +23,7 @@
   const statusEl = document.getElementById('status');
 
   // --- État ---
-  let tracks = [];          // liste des morceaux (depuis /api/tracks)
+  let tracks = [];          // liste des morceaux (depuis api/tracks)
   let currentIndex = -1;    // index du morceau courant (-1 = aucun)
   let isUserSeeking = false; // vrai pendant que l'utilisateur déplace la barre de progression
   let playbackStarted = false; // vrai après le premier play() (pour ne pas relancer l'autoplay)
