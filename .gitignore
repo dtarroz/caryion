@@ -12,3 +12,6 @@ MusicPlayer.Web/mp3/
 # IDE
 .idea/
 *.code-workspace
+
+# macOS
+.DS_Store
