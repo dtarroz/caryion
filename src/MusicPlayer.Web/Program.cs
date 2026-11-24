@@ -25,6 +25,8 @@ if (app.Environment.IsDevelopment())
 
 app.UsePathBase(app.Configuration["path-base"]);
 
+app.UseRouting();
+
 // Fichiers statiques (index.html, CSS, JS) servis depuis wwwroot.
 app.UseStaticFiles();
 
