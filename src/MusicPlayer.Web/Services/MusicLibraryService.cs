@@ -24,11 +24,11 @@ public class MusicLibraryService
     /// </summary>
     public IEnumerable<Track> GetTracks()
     {
-        _logger.LogInformation("Lecture de la liste des fichiers MP3 dans le répertoire : {RootPath}", _rootPath);
+        _logger.LogError("Lecture de la liste des fichiers MP3 dans le répertoire : {RootPath}", _rootPath);
 
         if (!Directory.Exists(_rootPath))
         {
-            _logger.LogWarning("Répertoire MP3 introuvable : {RootPath}", _rootPath);
+            _logger.LogError("Répertoire MP3 introuvable : {RootPath}", _rootPath);
             // Répertoire absent (cas courant en développement avant ajout de fichiers).
             return Enumerable.Empty<Track>();
         }
