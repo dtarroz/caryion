@@ -38,7 +38,7 @@ public class MusicLibraryService
                 {
                     FileName = fileName,
                     Title = Path.GetFileNameWithoutExtension(fileName),
-                    Url = $"/api/tracks/{Uri.EscapeDataString(fileName)}",
+                    Url = $"api/tracks/{Uri.EscapeDataString(fileName)}",
                     Size = info.Length
                 };
             })
