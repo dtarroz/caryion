@@ -1,4 +1,5 @@
 using MusicPlayer.Web.Models;
+
 namespace MusicPlayer.Web.Services;
 
 /// <summary>
@@ -34,15 +35,39 @@ public class MusicLibraryService
             {
                 var fileName = Path.GetFileName(fullPath);
                 var info = new FileInfo(fullPath);
+                var artworkUrl = ResolveCoverUrl(fullPath, fileName);
                 return new Track
                 {
                     FileName = fileName,
                     Title = Path.GetFileNameWithoutExtension(fileName),
+                    Artist = "POC Artist",
+                    Album = "POC Album",
                     Url = $"api/tracks/{Uri.EscapeDataString(fileName)}",
-                    Size = info.Length
+                    Size = info.Length,
+                    ArtworkUrl = artworkUrl
                 };
             })
             .ToList();
+    }
+
+    /// <summary>
+    /// Recherche une jaquette "sidecar" (même nom de base que le MP3, extension image) dans le même répertoire.
+    /// Retourne l'URL de l'endpoint de couverture si une image est trouvée, sinon null.
+    /// </summary>
+    private static string? ResolveCoverUrl(string fullPath, string fileName)
+    {
+        var directory = Path.GetDirectoryName(fullPath);
+        if (directory is null) return null;
+        var baseName = Path.GetFileNameWithoutExtension(fullPath);
+        foreach (var ext in new[] { ".jpg", ".jpeg", ".png", ".webp" })
+        {
+            var candidate = Path.Combine(directory, baseName + ext);
+            if (File.Exists(candidate))
+            {
+                return $"api/tracks/{Uri.EscapeDataString(fileName)}/cover";
+            }
+        }
+        return null;
     }
 
     /// <summary>
@@ -52,15 +77,21 @@ public class MusicLibraryService
     public string? GetSafeFullPath(string fileName)
     {
         if (string.IsNullOrWhiteSpace(fileName))
+        {
             return null;
+        }
 
         // Rejet des caractères interdits et des tentatives de traversée de répertoire.
         if (fileName.Contains('/') || fileName.Contains('\\') || fileName.Contains('\0'))
+        {
             return null;
+        }
 
         // Seuls les fichiers .mp3 sont autorisés.
         if (!fileName.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase))
+        {
             return null;
+        }
 
         // Résolution du chemin absolu et vérification qu'il reste bien dans le répertoire racine.
         var rootFullPath = Path.GetFullPath(_rootPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);

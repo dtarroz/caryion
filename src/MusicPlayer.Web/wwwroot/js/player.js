@@ -76,8 +76,19 @@
     // Mise à jour de l'interface "now playing".
     // Note : le JSON de l'API ASP.NET Core utilise la casse camelCase (title, url, size...).
     npTitle.textContent = track.title;
-    npArtist.textContent = '—';
-    npAlbum.textContent = '—';
+    npArtist.textContent = track.artist || '—';
+    npAlbum.textContent = track.album || '—';
+
+    // Affichage de la jaquette (pochette) dans l'interface.
+    if (track.artworkUrl) {
+      npCover.style.backgroundImage = `url('${track.artworkUrl}')`;
+      npCover.style.backgroundSize = 'cover';
+      npCover.style.backgroundPosition = 'center';
+      npCover.textContent = '';
+    } else {
+      npCover.style.backgroundImage = 'none';
+      npCover.textContent = '♪';
+    }
 
     // Réinitialiser la progression visuelle.
     txtCurrent.textContent = '0:00';
@@ -274,11 +285,14 @@
   function updateMediaSessionMetadata(track) {
     if (!('mediaSession' in navigator)) return;
     try {
+      const artwork = track.artworkUrl
+        ? [{ src: track.artworkUrl, sizes: '512x512', type: 'image/jpeg' }]
+        : [];
       navigator.mediaSession.metadata = new MediaMetadata({
-        title: track.Title,
-        artist: '—',
-        album: '—',
-        artwork: [] // pas de pochette dans cette version POC
+        title: track.title,
+        artist: track.artist || '—',
+        album: track.album || '—',
+        artwork
       });
     } catch (err) {
       console.warn('Media Session metadata non pris en charge :', err);

@@ -73,4 +73,44 @@ public class TracksController : ControllerBase
             return StatusCode(500);
         }
     }
+
+    /// <summary>
+    /// Retourne la jaquette (album art) associée au morceau, si une image sidecar existe
+    /// (même nom de base que le MP3, extension .jpg/.jpeg/.png/.webp).
+    /// </summary>
+    [HttpGet("{fileName}/cover")]
+    public IActionResult GetCover(string fileName)
+    {
+        var fullPath = _library.GetSafeFullPath(fileName);
+        if (fullPath is null)
+        {
+            _logger.LogWarning("Fichier MP3 introuvable ou accès refusé : {FileName}", fileName);
+            return NotFound();
+        }
+
+        var directory = Path.GetDirectoryName(fullPath);
+        if (directory is null)
+        {
+            return NotFound();
+        }
+
+        var baseName = Path.GetFileNameWithoutExtension(fullPath);
+        foreach (var ext in new[] { ".jpg", ".jpeg", ".png", ".webp" })
+        {
+            var candidate = Path.Combine(directory, baseName + ext);
+            if (File.Exists(candidate))
+            {
+                var contentType = ext switch
+                {
+                    ".jpg" or ".jpeg" => "image/jpeg",
+                    ".png" => "image/png",
+                    ".webp" => "image/webp",
+                    _ => "application/octet-stream"
+                };
+                return PhysicalFile(candidate, contentType, enableRangeProcessing: false);
+            }
+        }
+
+        return NotFound();
+    }
 }
