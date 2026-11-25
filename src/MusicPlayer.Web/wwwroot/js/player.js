@@ -33,6 +33,7 @@
     await loadTracks();
     bindEvents();
     initMediaSession();
+    initVisibilityHandling();
     setStatus('Prêt. Sélectionnez un morceau et appuyez sur Lecture.');
   }
   // --- Chargement de la playlist ---
@@ -306,6 +307,25 @@
     } catch (err) {
       // playbackState peut ne pas être pris en charge partout.
     }
+  }
+
+  // --- Gestion du passage en arrière-plan / retour premier plan (iOS) ---
+  let wasPlayingBeforeHide = false;
+
+  function initVisibilityHandling() {
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        // La page passe en arrière-plan (écran verrouillé, autre app, etc.)
+        wasPlayingBeforeHide = !audioPlayer.paused;
+      } else {
+        // La page revient au premier plan
+        if (wasPlayingBeforeHide && audioPlayer.paused) {
+          // iOS bloque la reprise automatique sans interaction utilisateur.
+          setStatus('Lecture interrompue en arrière-plan. Appuyez sur Lecture pour reprendre.');
+        }
+        wasPlayingBeforeHide = false;
+      }
+    });
   }
 
   // Démarrage.
