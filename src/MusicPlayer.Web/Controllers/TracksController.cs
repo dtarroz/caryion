@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MusicPlayer.Web.Models;
 using MusicPlayer.Web.Services;
-using System.IO;
 
 namespace MusicPlayer.Web.Controllers;
 
@@ -99,7 +98,7 @@ public class TracksController : ControllerBase
         foreach (var ext in new[] { ".jpg", ".jpeg", ".png", ".webp" })
         {
             var candidate = Path.Combine(directory, baseName + ext);
-            if (File.Exists(candidate))
+            if (System.IO.File.Exists(candidate))
             {
                 var contentType = ext switch
                 {
