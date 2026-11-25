@@ -2,19 +2,19 @@
   "name": "Music Player",
   "short_name": "Music Player",
   "description": "Lecteur MP3 streaming – écran verrouillé iOS",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#111827",
   "theme_color": "#111827",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/icon-192.svg",
+      "src": "icon-192.svg",
       "sizes": "192x192",
       "type": "image/svg+xml"
     },
     {
-      "src": "/icon-512.svg",
+      "src": "icon-512.svg",
       "sizes": "512x512",
       "type": "image/svg+xml"
     }
