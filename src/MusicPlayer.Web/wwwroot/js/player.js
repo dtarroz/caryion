@@ -165,6 +165,9 @@
       sldProgress.max = duration;
       sldProgress.value = current;
     }
+
+    // Mise à jour de la position sur l'écran verrouillé / centre de contrôle iOS.
+    updateMediaSessionPositionState();
   }
 
   // --- Recherche (seek) sur la barre de progression ---
@@ -238,6 +241,7 @@
     audioPlayer.addEventListener('loadedmetadata', () => {
       txtDuration.textContent = formatTime(audioPlayer.duration || 0);
       sldProgress.max = audioPlayer.duration || 0;
+      updateMediaSessionPositionState();
     });
 
     audioPlayer.addEventListener('timeupdate', updateProgress);
@@ -278,6 +282,13 @@
       navigator.mediaSession.setActionHandler('pause', togglePlay);
       navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
       navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
+      // Gestion du déplacement de la barre de progression depuis l'écran verrouillé / centre de contrôle iOS.
+      navigator.mediaSession.setActionHandler('seekto', (details) => {
+        const seekTime = details.seekTime || 0;
+        if (!isNaN(seekTime) && audioPlayer.duration) {
+          audioPlayer.currentTime = seekTime;
+        }
+      });
     } catch (err) {
       console.warn('Media Session handlers non pris en charge :', err);
     }
@@ -306,6 +317,21 @@
       navigator.mediaSession.playbackState = audioPlayer.paused ? 'paused' : 'playing';
     } catch (err) {
       // playbackState peut ne pas être pris en charge partout.
+    }
+  }
+
+  // Met à jour la position et la durée affichées sur l'écran verrouillé / centre de contrôle iOS.
+  function updateMediaSessionPositionState() {
+    if (!('mediaSession' in navigator)) return;
+    if (!('setPositionState' in navigator.mediaSession)) return;
+    try {
+      navigator.mediaSession.setPositionState({
+        position: audioPlayer.currentTime || 0,
+        duration: audioPlayer.duration || 0,
+        playbackRate: audioPlayer.playbackRate || 1
+      });
+    } catch (err) {
+      // setPositionState peut ne pas être pris en charge partout.
     }
   }
 
